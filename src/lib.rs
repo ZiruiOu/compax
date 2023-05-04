@@ -1,11 +1,17 @@
 use std::cmp::{Ord, Ordering};
-use std::convert::{From, Into};
+use std::convert::From;
 
 pub mod paxos_kv {
     tonic::include_proto!("paxoskv");
 }
 
-#[derive(Debug, Clone, Eq, PartialOrd)]
+#[derive(Debug, Clone, PartialEq)]
+pub enum PaxosProposalStatus {
+    Ok,
+    Fail,
+}
+
+#[derive(Debug, Default, Clone, Eq, PartialEq, PartialOrd)]
 pub struct BallotID {
     propose_number: u64,
     proposer_id: u64,
@@ -17,12 +23,6 @@ impl BallotID {
             propose_number: propose_number,
             proposer_id: proposer_id,
         }
-    }
-}
-
-impl PartialEq for BallotID {
-    fn eq(&self, other: &Self) -> bool {
-        self.propose_number == other.propose_number && self.proposer_id == other.proposer_id
     }
 }
 
@@ -53,12 +53,3 @@ impl From<BallotID> for paxos_kv::BallotId {
         }
     }
 }
-
-//impl Into<paxos_kv::BallotId> for BallotID {
-//    fn into(self) -> paxos_kv::BallotId {
-//        paxos_kv::BallotId {
-//            propose_number: self.propose_number,
-//            proposer_id: self.proposer_id,
-//        }
-//    }
-//}

@@ -3,7 +3,7 @@ package paxoskv;
 
 service PaxosService {
     rpc Propose (ProposeRequest) returns (ProposeReply);
-    //rpc Accept (AcceptRequest) returns (AcceptReply);
+    rpc Accept (AcceptRequest) returns (AcceptReply);
 }
 
 // TODO (ozr) : using string to represent `proposer_id` ?
@@ -19,7 +19,7 @@ enum PhaseStatus {
 
 message Proposal {
     BallotID propose_id = 1;
-    uint64 propose_value = 2;
+    optional uint64 propose_value = 2;
 }
 
 // Phase-1 (Propose): Proposer propose new values
