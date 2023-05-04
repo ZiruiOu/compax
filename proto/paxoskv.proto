@@ -1,0 +1,42 @@
+syntax="proto3";
+package paxoskv;
+
+service PaxosService {
+    rpc Propose (ProposeRequest) returns (ProposeReply);
+    //rpc Accept (AcceptRequest) returns (AcceptReply);
+}
+
+// TODO (ozr) : using string to represent `proposer_id` ?
+message BallotID {
+    uint64 propose_number = 1;
+    uint64 proposer_id = 2;
+}
+
+enum PhaseStatus {
+    REJECT = 0;
+    ACCEPT = 1;
+}
+
+message Proposal {
+    BallotID propose_id = 1;
+    uint64 propose_value = 2;
+}
+
+// Phase-1 (Propose): Proposer propose new values
+message ProposeRequest {
+    Proposal proposal = 1;
+}
+
+message ProposeReply {
+    PhaseStatus status = 1;
+    Proposal accepted_proposal = 2;
+}
+
+// Phase-2 (Accept): Propose ask acceptors to accept values
+message AcceptRequest {
+    Proposal proposal = 1;
+}
+
+message AcceptReply {
+    PhaseStatus status = 1;
+}
